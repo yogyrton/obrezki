@@ -16,18 +16,18 @@ return new class extends Migration
     {
         Schema::create('announcements', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 100);   // название товара
+            $table->string('title', 100)->comment('название товара');
 
-            $table->integer('status')->default(AnnouncementType::Moderation);  // статус объявления
+            $table->integer('status')->default(AnnouncementType::Moderation)->comment('статус объявления');
 
-            $table->string('slug');    // слаг тайтла
+            $table->string('slug')->comment('слаг тайтла');
 
-            $table->integer('type_transaction'); // тип сделки (куплю/продам)
-            $table->integer('condition');    // состояние товара (бу/новый)
+            $table->integer('type_transaction')->comment('тип сделки (куплю/продам)');
+            $table->integer('condition')->comment('состояние товара (бу/новый)');
 
-            $table->string('descriptions');    // описание
-            $table->double('price')->nullable();    // цена
-            $table->string('unit')->nullable();    // ед.изм
+            $table->string('descriptions')->comment('описание');
+            $table->double('price')->nullable()->comment('цена');
+            $table->string('unit')->nullable()->comment('ед.изм');
 
             //$table->foreignIdFor(User::class)->constrained()->cascadeOnDelete(); // связь с юзером
             $table->timestamps();
