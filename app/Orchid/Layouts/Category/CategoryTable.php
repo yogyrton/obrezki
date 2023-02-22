@@ -3,6 +3,7 @@
 namespace App\Orchid\Layouts\Category;
 
 use App\Models\Category;
+use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -26,10 +27,15 @@ class CategoryTable extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('category_id', 'Родительская категория')->render(function (Category $category){
+            TD::make('category_id', 'Родительская категория')->render(function (Category $category) {
                 return $category->category_id ? $category->parent->title : 'Родительская категория';
             })->sort(),
             TD::make('title', 'Название')->sort()->filter(TD::FILTER_TEXT),
+            TD::make('action', 'Редактировать')->render(function (Category $category) {
+                return ModalToggle::make('Редактировать категорию')->modal('editCategory')->method('update')->asyncParameters([
+                    'category' => $category->id,
+                ]);
+            })
         ];
     }
 }

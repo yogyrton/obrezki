@@ -5,6 +5,7 @@ namespace App\Orchid\Screens\Category;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Models\Category;
 use App\Orchid\Layouts\Category\CategoryTable;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Relation;
@@ -44,7 +45,7 @@ class CategoryScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            ModalToggle::make('Добавить категорию')->modal('createCategory')->method('create')
+            ModalToggle::make('Добавить категорию')->modal('createCategory')->method('create'),
         ];
     }
 
@@ -57,6 +58,7 @@ class CategoryScreen extends Screen
     {
         return [
             CategoryTable::class,
+
             Layout::modal('createCategory', Layout::rows([
                 Input::make('title')->required()->title('Название категории'),
 
@@ -65,6 +67,16 @@ class CategoryScreen extends Screen
                 ->title('Родительская категория (при пустом поле будет являться родительской)')
 
             ]))->title('Добавление категории')->applyButton('Создать'),
+
+
+            Layout::modal('editCategory', Layout::rows([
+                Input::make('category.id')->type('hidden'),
+                Input::make('category.title')->required()->title('Название категории'),
+
+                Relation::make('category.category_id')
+                    ->fromModel(Category::class, 'title')
+                    ->title('Родительская категория (при пустом поле будет являться родительской)')
+            ]))->async('asyncGetCategory')->title('Редактирование категории')->applyButton('Редактировать'),
         ];
     }
 
@@ -74,5 +86,20 @@ class CategoryScreen extends Screen
         Category::query()->create($data);
 
         Toast::info('Категория добавлена');
+    }
+
+    public function update(Request $request)
+    {
+        $category = Category::query()->find($request->input('category.id'));
+        $category->update($request->category);
+
+        Toast::info('Категория обновлена');
+    }
+
+    public function asyncGetCategory(Category $category)
+    {
+        return [
+            'category' => $category,
+        ];
     }
 }
