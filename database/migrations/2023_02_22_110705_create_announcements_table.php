@@ -26,7 +26,7 @@ return new class extends Migration
             $table->integer('condition')->comment('состояние товара (бу/новый)');
 
             $table->string('descriptions')->comment('описание');
-            $table->double('price')->nullable()->comment('цена');
+            $table->decimal('price', 5)->nullable()->comment('цена');
             $table->string('unit')->nullable()->comment('ед.изм');
 
             //$table->foreignIdFor(User::class)->constrained()->cascadeOnDelete(); // связь с юзером

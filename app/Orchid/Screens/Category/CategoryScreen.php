@@ -77,6 +77,11 @@ class CategoryScreen extends Screen
                     ->fromModel(Category::class, 'title')
                     ->title('Родительская категория (при пустом поле будет являться родительской)')
             ]))->async('asyncGetCategory')->title('Редактирование категории')->applyButton('Редактировать'),
+
+            Layout::modal('deleteCategory', Layout::rows([
+                Input::make('category.id')->type('hidden'),
+                Input::make('category.title')->required()->title('Название категории'),
+            ]))->async('asyncGetCategory')->title('Удаление категории')->applyButton('Удалить'),
         ];
     }
 
@@ -94,6 +99,15 @@ class CategoryScreen extends Screen
         $category->update($request->category);
 
         Toast::info('Категория обновлена');
+    }
+
+    public function delete(Request $request)
+    {
+        $category = Category::query()->find($request->input('category.id'));
+
+        $category->delete();
+
+        Toast::info('Категория удалена');
     }
 
     public function asyncGetCategory(Category $category)

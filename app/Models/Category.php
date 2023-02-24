@@ -18,7 +18,6 @@ class Category extends Model
         'category_id',
     ];
 
-
     protected $allowedSorts = [
         'title',
         'category_id',
@@ -27,7 +26,6 @@ class Category extends Model
     protected $allowedFilters = [
         'title',
     ];
-
 
     public function parent()
     {

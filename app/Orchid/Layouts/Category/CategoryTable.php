@@ -31,11 +31,18 @@ class CategoryTable extends Table
                 return $category->category_id ? $category->parent->title : 'Родительская категория';
             })->sort(),
             TD::make('title', 'Название')->sort()->filter(TD::FILTER_TEXT),
-            TD::make('action', 'Редактировать')->render(function (Category $category) {
+
+            TD::make('edit', 'Редактировать')->render(function (Category $category) {
                 return ModalToggle::make('Редактировать категорию')->modal('editCategory')->method('update')->asyncParameters([
                     'category' => $category->id,
                 ]);
-            })
+            }),
+
+            TD::make('delete', 'Удалить')->render(function (Category $category) {
+                return ModalToggle::make('Удалить категорию')->modal('deleteCategory')->method('delete')->asyncParameters([
+                    'category' => $category->id,
+                ]);
+            }),
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\Announcement;
 
 use App\Models\Announcement;
 use App\Orchid\Layouts\Announcement\AnnouncementTable;
+use App\Orchid\Layouts\AnnouncementSelection;
 use Orchid\Screen\Screen;
 
 class AnnouncementScreen extends Screen
@@ -16,7 +17,10 @@ class AnnouncementScreen extends Screen
     public function query(): iterable
     {
         return [
-            'announ' => Announcement::filters()->defaultSort('created_at', 'desc')->paginate(20),
+            'announ' => Announcement::filtersApplySelection(AnnouncementSelection::class)
+                ->filters()
+                ->defaultSort('created_at', 'desc')
+                ->paginate(20),
         ];
     }
 
@@ -48,6 +52,7 @@ class AnnouncementScreen extends Screen
     public function layout(): iterable
     {
         return [
+            AnnouncementSelection::class,
             AnnouncementTable::class
         ];
     }
