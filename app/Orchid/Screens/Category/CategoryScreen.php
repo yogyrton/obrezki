@@ -23,7 +23,9 @@ class CategoryScreen extends Screen
     public function query(): iterable
     {
         return [
-            'categories' => Category::filters()->defaultSort('category_id', 'asc')->get(),
+            'categories' => Category::filters()
+                ->defaultSort('category_id', 'asc')
+                ->get(),
         ];
     }
 

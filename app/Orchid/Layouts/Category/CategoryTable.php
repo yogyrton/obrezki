@@ -30,6 +30,7 @@ class CategoryTable extends Table
             TD::make('category_id', 'Родительская категория')->render(function (Category $category) {
                 return $category->category_id ? $category->parent->title : 'Родительская категория';
             })->sort(),
+
             TD::make('title', 'Название')->sort()->filter(TD::FILTER_TEXT),
 
             TD::make('edit', 'Редактировать')->render(function (Category $category) {
