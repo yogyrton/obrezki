@@ -17,10 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [MainPageController::class, 'index'])->name('main');
 Route::get('/show', [MainPageController::class, 'show'])->name('show');
-Route::get('/show2', function (){
-    $arr = \App\Enums\RegionType::getCityes(3);
-    dd($arr);
-});
 
 Route::get('/clear', function () {
     Artisan::call('cache:clear');

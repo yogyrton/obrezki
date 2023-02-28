@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        //$schedule->call(BirthdayService::class)->daily();
+        $schedule->call([BirthdayService::class, 'sendBirthdayNotifications'])->daily();
     }
 
     /**

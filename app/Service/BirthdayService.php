@@ -2,30 +2,37 @@
 
 namespace App\Service;
 
-use App\Events\BirthdayEvent;
-use App\Models\Announcement;
 use App\Models\User;
-use Carbon\Carbon;
+use App\Notifications\BirthdayNotification;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Notification;
+
 
 class BirthdayService
 {
-    public function __invoke()
+    private $dateNow;
+    private $usersBirthday;
+
+    public function __construct()
     {
-        // Заменить в будущем на модель юзера, поля на имя и дату рождения
+        $this->dateNow = \Carbon\Carbon::now();
+        $this->usersBirthday = $this->getUsersBirthday();
+    }
 
-        $allUsers = Announcement::query()->select('title', 'created_at')->get();
+    private function getUsersBirthday() : Collection
+    {
+        // Заменить в будущем поля имя и дату рождения
+        return User::query()
+            ->select( 'id', 'name', 'created_at')
+            ->whereDay('created_at', $this->dateNow->day)
+            ->whereMonth('created_at', $this->dateNow->month)
+            ->get();
+    }
 
-        $usersBirthday = [];
-
-        foreach ($allUsers as $user) {
-            $dateUser = Carbon::create($user->created_at); // заменить на дату рождения
-            $dateNow = \Carbon\Carbon::now();
-
-            if ($dateNow->month === $dateUser->month && $dateNow->day === $dateUser->day) {
-                $usersBirthday[] = $user;
-            }
+    public function sendBirthdayNotifications()
+    {
+        foreach ($this->usersBirthday as $user) {
+            $user->notify(new BirthdayNotification($user->name));
         }
-
-        event(new BirthdayEvent($usersBirthday));
     }
 }
