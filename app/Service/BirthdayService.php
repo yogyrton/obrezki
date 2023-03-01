@@ -19,11 +19,11 @@ class BirthdayService
         $this->usersBirthday = $this->getUsersBirthday();
     }
 
-    private function getUsersBirthday() : Collection
+    private function getUsersBirthday(): Collection
     {
         // Заменить в будущем поля имя и дату рождения
         return User::query()
-            ->select( 'id', 'name', 'created_at')
+            ->select(['id', 'name', 'created_at'])
             ->whereDay('created_at', $this->dateNow->day)
             ->whereMonth('created_at', $this->dateNow->month)
             ->get();
